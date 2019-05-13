@@ -9,7 +9,10 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'zxqfl/tabnine-vim'
 Plugin 'liuchengxu/space-vim-dark'
-Plugin 'altercation/vim-colors-solarized'
+Plugin 'morhetz/gruvbox'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'itchyny/lightline.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'Yggdroot/indentLine'
 Plugin 'octol/vim-cpp-enhanced-highlight'
@@ -21,7 +24,7 @@ map <C-n> :NERDTreeToggle<CR>
 
 syntax enable
 set background=dark
-colorscheme solarized
+colorscheme gruvbox
 
 :set cindent
 :set shiftwidth=2
@@ -32,3 +35,4 @@ map <C-t><up> :tabr<cr>
 map <C-t><down> :tabl<cr>
 map <C-t><left> :tabp<cr>
 map <C-t><right> :tabn<cr>
+
