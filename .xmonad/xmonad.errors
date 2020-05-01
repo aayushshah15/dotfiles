@@ -1,0 +1,15 @@
+
+xmonad.hs:244:1: warning: [-Wtabs]
+    Tab character found here, and in one further location.
+    Please use spaces instead.
+    |
+244 |         spawn "xset r rate 200 40"
+    | ^^^^^^^^
+
+xmonad.hs:260:12: warning: [-Wdeprecations]
+    In the use of ‘defaultConfig’
+    (imported from XMonad, but defined in XMonad.Config):
+    Deprecated: "Use def (from Data.Default, and re-exported by XMonad and XMonad.Config) instead."
+    |
+260 | defaults = defaultConfig {
+    |            ^^^^^^^^^^^^^
