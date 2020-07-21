@@ -9,22 +9,23 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/aayush/.oh-my-zsh"
+export ZSH="/Users/aayush/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
+ZSH_DISABLE_COMPFIX="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -71,11 +72,11 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,17 +103,70 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-alias zshconf="vim ~/.zshrc"
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias zshconf='vim ~/.zshrc'
 alias tm='tmux attach || tmux new'
-alias ohmyzsh="vim ~/.oh-my-zsh"
-alias z=zathura
+alias vim='nvim'
+alias ls='exa'
 alias ll='exa -l'
-alias ls=exa
+alias gst='git status'
+alias z='zathura'
+alias gworker="$HOME/go/src/github.com/cockroachdb/cockroach/scripts/gceworker.sh ssh"
+alias gstop="$HOME/go/src/github.com/cockroachdb/cockroach/scripts/gceworker.sh stop"
+alias ww="ssh aayush-desktop.local -A"
+alias gstart="$HOME/go/src/github.com/cockroachdb/cockroach/scripts/gceworker.sh start"
 
-[[ -s /home/aayush/.autojump/etc/profile.d/autojump.sh ]] && source /home/aayush/.autojump/etc/profile.d/autojump.sh
+unalias gr
+function gr() {
+	if [ "$1" != "" ]
+	then
+		git rebase -i HEAD~"$1"
+	fi
+}
 
-autoload -U compinit && compinit -u
-	
+alias gsync="rsync -avzP --update --exclude '*.js' -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach/pkg gceworker:/home/aayush/go/src/github.com/cockroachdb/cockroach/"
+alias gs=gsync
+alias wee="rsync -avzP --update --exclude '(*.pb.go)|(*.js)' -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach/pkg aayush@aayush-desktop.local:/home/aayush/go/src/github.com/cockroachdb/cockroach/"
+
+alias goall="rsync -avzP --update -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach aayush@aayush-desktop.local:/home/aayush/go/src/github.com/cockroachdb/cockroach"
+
+func wer() {
+	if [ "$1" != "" ]
+	then
+		wee; ssh aayush-desktop.local -X "source /home/aayush/.zshrc; cd /home/aayush/go/src/github.com/cockroachdb/cockroach; $1"
+	fi
+}
+
+export LDFLAGS="-L/usr/local/opt/zlib/lib"
+export CPPFLAGS="-I/usr/local/opt/zlib/include"
+
+func log_in_journal() {
+	if [ "$1" != "" ]
+	then
+		mkdir -p ~/journal/$(date +"Week_%U_in_%b")
+		echo "[$(date)]: $@" >> ~/journal/$(date +"Week_%U_in_%b")/$(date +"%A")
+	fi
+}
+
+source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH="$PATH:/usr/local/Cellar/go\@1.14/1.14.4/bin/"
+
+PATH="/Users/aayush/go/bin:$PATH"
+PATH="$HOME/.cargo/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/aayush/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/aayush/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/aayush/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/aayush/google-cloud-sdk/completion.zsh.inc'; fi
+export CLUSTER=aayushs-stress
+
+alias rec='log_in_journal'
+alias today="cat ~/journal/$(date +'Week_%U_in_%b')/$(date +'%A')"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
