@@ -28,6 +28,7 @@
 	uncommit = reset --soft HEAD~
 	unmerged = branch --no-merged
 	unstage = reset HEAD --
+	patch-pr = "!f() { git pull origin pull/$@/head; }; f"
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -51,11 +52,8 @@
 [commit]
 	template = /Users/aayush/.stCommitMsg
 [delta]
-	side-by-side = true
 	line-numbers = true
 	plus-color = "#012800"
 	minus-color = "#340001"
 	syntax-theme = Dracula
-[interactive]
-    	diffFilter = delta --color-only
 
