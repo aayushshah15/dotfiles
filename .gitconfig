@@ -5,6 +5,7 @@
 	assumed  = !git ls-files -v | grep ^h | cut -c 3-
 	branches = branch -a
 	co = checkout
+	newbranch = "!bt() { git branch $(date +%Y%m%d)_$1; }; bt"
 	commit = commit -v
 	contributors = shortlog --summary --numbered
 	ctags = !.git/hooks/ctags
@@ -41,8 +42,8 @@
 	email = aayush.shah15@gmail.com
 [core]
 	excludesfile = /Users/aayush/.gitignore_global
-	editor = nvim
 	pager = delta
+	editor = nvim
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 

@@ -119,6 +119,12 @@ alias gworker="$HOME/go/src/github.com/cockroachdb/cockroach/scripts/gceworker.s
 alias gstop="$HOME/go/src/github.com/cockroachdb/cockroach/scripts/gceworker.sh stop"
 alias ww="ssh aayush-desktop.local -A"
 alias gstart="$HOME/go/src/github.com/cockroachdb/cockroach/scripts/gceworker.sh start"
+alias view='gh pr view --web'
+alias issue='gh issue view --web'
+alias mp='mosh aayush@pop-os.local'
+alias status='gh pr status'
+
+export GOROOT="$(brew --prefix go)/libexec"
 
 unalias gr
 function gr() {
@@ -128,17 +134,71 @@ function gr() {
 	fi
 }
 
-alias gsync="rsync -avzP --update --exclude '*.js' -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach/pkg gceworker:/home/aayush/go/src/github.com/cockroachdb/cockroach/"
+function newCluster() {
+	if [ -z "$2" ]
+	then
+	else
+		make bin/roachprod && roachprod create aayushs-test --nodes=$1 --lifetime=3h --gce-machine-type=n1-standard-$2;
+	fi
+}
 alias gs=gsync
-alias wee="rsync -avzP --update --exclude '(*.pb.go)|(*.js)' -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach/pkg aayush@aayush-desktop.local:/home/aayush/go/src/github.com/cockroachdb/cockroach/"
+alias wee="rsync -avzP --update --exclude '(*.pb.go)|(*.js)' -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach/pkg pop:/home/aayush/go/src/github.com/cockroachdb/cockroach/"
+alias wendor="rsync -avzP --update -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach/vendor pop:/home/aayush/go/src/github.com/cockroachdb/cockroach/"
+alias goall="rsync -avzP --update -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach aayush@pop-os.local:/home/aayush/go/src/github.com/cockroachdb/"
 
-alias goall="rsync -avzP --update -e ssh /Users/aayush/go/src/github.com/cockroachdb/cockroach aayush@aayush-desktop.local:/home/aayush/go/src/github.com/cockroachdb/cockroach"
-
-func wer() {
+function wer() {
 	if [ "$1" != "" ]
 	then
-		wee; ssh aayush-desktop.local -X "source /home/aayush/.zshrc; cd /home/aayush/go/src/github.com/cockroachdb/cockroach; $1"
+		wee; ssh pop -Y "source /home/aayush/.zshrc; cd /home/aayush/go/src/github.com/cockroachdb/cockroach; $*"
 	fi
+}
+
+function cp_file() {
+	scp aayush@pop-os.local:/home/aayush/go/src/github.com/cockroachdb/cockroach/$1 .
+}
+
+function cp_lbin() {
+	cp_file cockroach-linux-2.6.32-gnu-amd64
+}
+
+function lbuild() {
+	wer "./build/builder.sh mkrelease amd64-linux-gnu" && cp_lbin;
+
+}
+
+function mbuild() {
+	wer ./build/builder.sh mkrelease amd64-darwin && cp_file cockroach-darwin-10.10-amd64 && mv cockroach-darwin-10.10-amd64 ./cockroach
+
+}
+
+function mbuildshort() {
+	wer ./build/builder.sh mkrelease amd64-darwin buildshort && cp_file cockroach-darwin-10.10-amd64 && mv cockroach-darwin-10.10-amd64 ./cockroach
+
+}
+
+function lbuildshort() {
+	wer ./build/builder.sh mkrelease amd64-linux-gnu buildshort;
+
+}
+
+function lworkload() {
+	wer ./build/builder.sh mkrelease amd64-linux-gnu bin/workload;
+}
+
+function lroachtest() {
+	wer ./build/builder.sh mkrelease amd64-linux-gnu bin/roachtest;
+}
+
+function lroachprod() {
+	wer make bin/roachprod;
+}
+
+function lclean() {
+	wer make clean;
+}
+
+function lrrt() {
+	wer make bin/roachtest && wer roachtest "$*";
 }
 
 export LDFLAGS="-L/usr/local/opt/zlib/lib"
@@ -173,6 +233,8 @@ alias rec='log_in_journal'
 alias today="f() { cat ~/journal/$(date +'Week_%U_in_%b')/$(date +'%A') }; f"
 alias thisweek="f() { cat ~/journal/$(date +'Week_%U_in_%b')/* | less }; f"
 
+source $(brew --prefix)/etc/bash_completion.d/bazel-complete.bash
+export PATH="/usr/local/opt/ccache/libexec:$PATH"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 #compdef _gh gh
 
