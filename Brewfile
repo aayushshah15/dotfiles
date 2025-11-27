@@ -21,3 +21,6 @@ cask "cursor"
 cask "raycast"
 cask "orbstack"
 cask "linear-linear"
+
+# Fonts
+cask "font-fira-code"
