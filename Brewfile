@@ -1,6 +1,6 @@
 # CLI Tools
 brew "git"
-# Note: Node is managed by nvm via Herd (not Homebrew)
+brew "node"
 brew "python@3.12"
 brew "wget"
 brew "curl"
@@ -9,7 +9,6 @@ brew "tree"
 brew "htop"
 brew "jq"
 brew "fzf"
-brew "urlview"  # Required for tmux-urlview plugin
 
 # Development Tools
 brew "gh"  # GitHub CLI
@@ -22,6 +21,7 @@ cask "spotify"
 cask "cursor"
 cask "raycast"
 cask "orbstack"
+cask "zoom"
 cask "linear-linear"
 
 # Fonts
